@@ -1,154 +1,177 @@
-<script>
+/*
+========================================
+   INITIALIZE LUCIDE ICONS
+========================================
+*/
 
-        /*
-         * Initialize Lucide Icons
-         *
-         * This is still required for:
-         * home
-         * user
-         * book-open
-         * image
-         * mail
-         * map-pin
-         * phone
-         * x
-         *
-         * YouTube is NOT initialized by Lucide anymore.
-         * YouTube now uses Font Awesome.
-         */
-
-        lucide.createIcons();
+lucide.createIcons();
 
 
-        /*
-         * Open Lightbox
-         */
+/*
+========================================
+   LIGHTBOX
+========================================
+*/
 
-        function openLightbox(src) {
+function openLightbox(src) {
 
-            const lightbox = document.getElementById('lightbox');
-            const img = document.getElementById('lightbox-img');
+    const lightbox = document.getElementById("lightbox");
+    const img = document.getElementById("lightbox-img");
 
-            img.src = src;
+    if (!lightbox || !img) return;
 
-            lightbox.classList.remove('hidden');
+    img.src = src;
 
-            setTimeout(() => {
+    lightbox.classList.remove("hidden");
 
-                lightbox.classList.add('opacity-100');
+    setTimeout(() => {
 
-                img.classList.remove('scale-95');
+        lightbox.classList.add("opacity-100");
 
-                img.classList.add('scale-100');
+        img.classList.remove("scale-95");
+        img.classList.add("scale-100");
 
-            }, 10);
+    }, 10);
 
-            document.body.style.overflow = 'hidden';
+    document.body.style.overflow = "hidden";
+}
+
+
+function closeLightbox() {
+
+    const lightbox = document.getElementById("lightbox");
+    const img = document.getElementById("lightbox-img");
+
+    if (!lightbox || !img) return;
+
+    lightbox.classList.remove("opacity-100");
+
+    img.classList.remove("scale-100");
+    img.classList.add("scale-95");
+
+    setTimeout(() => {
+
+        lightbox.classList.add("hidden");
+
+        img.src = "";
+
+        document.body.style.overflow = "auto";
+
+    }, 500);
+}
+
+
+/*
+========================================
+   ESC KEY CLOSE
+========================================
+*/
+
+document.addEventListener("keydown", function (event) {
+
+    if (event.key === "Escape") {
+
+        const lightbox = document.getElementById("lightbox");
+
+        if (
+            lightbox &&
+            !lightbox.classList.contains("hidden")
+        ) {
+
+            closeLightbox();
+
         }
 
+    }
 
-        /*
-         * Close Lightbox
-         */
-
-        function closeLightbox() {
-
-            const lightbox = document.getElementById('lightbox');
-            const img = document.getElementById('lightbox-img');
-
-            lightbox.classList.remove('opacity-100');
-
-            img.classList.remove('scale-100');
-
-            img.classList.add('scale-95');
-
-            setTimeout(() => {
-
-                lightbox.classList.add('hidden');
-
-                img.src = '';
-
-                document.body.style.overflow = 'auto';
-
-            }, 500);
-        }
+});
 
 
-        /*
-         * Close Lightbox with Escape Key
-         */
+/*
+========================================
+   GALLERY
+========================================
+*/
 
-        document.addEventListener('keydown', function(event) {
-
-            if (event.key === 'Escape') {
-
-                const lightbox = document.getElementById('lightbox');
-
-                if (!lightbox.classList.contains('hidden')) {
-                    closeLightbox();
-                }
-
-            }
-
-        });
-
-    </script>
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<script>
 let currentSlide = 0;
-const totalSlides = 6;
+const totalSlides = 1;
 let galleryTimer;
 
+
 function goToSlide(index) {
+
     currentSlide = index;
 
     const track = document.getElementById("galleryTrack");
 
-    track.style.transform = `translateX(-${currentSlide * 100}%)`;
+    if (track) {
 
-    document.querySelectorAll(".gallery-dot").forEach((dot, i) => {
-        dot.classList.toggle("active", i === currentSlide);
-    });
+        track.style.transform =
+            `translateX(-${currentSlide * 100}%)`;
+
+    }
+
+    document
+        .querySelectorAll(".gallery-dot")
+        .forEach((dot, i) => {
+
+            dot.classList.toggle(
+                "active",
+                i === currentSlide
+            );
+
+        });
 
     resetGalleryTimer();
 }
 
+
 function changeSlide(direction) {
+
     currentSlide += direction;
 
     if (currentSlide >= totalSlides) {
+
         currentSlide = 0;
+
     }
 
     if (currentSlide < 0) {
+
         currentSlide = totalSlides - 1;
+
     }
 
     goToSlide(currentSlide);
 }
 
+
 function resetGalleryTimer() {
+
     clearInterval(galleryTimer);
 
-    galleryTimer = setInterval(() => {
-        changeSlide(1);
-    }, 5000);
+    /*
+       Only start automatic sliding
+       when there is more than one image.
+    */
+
+    if (totalSlides > 1) {
+
+        galleryTimer = setInterval(() => {
+
+            changeSlide(1);
+
+        }, 5000);
+
+    }
+
 }
 
+
+/*
+========================================
+   START GALLERY
+========================================
+*/
+
 resetGalleryTimer();
-</script>
