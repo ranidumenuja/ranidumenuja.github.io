@@ -1,4 +1,4 @@
-```javascript
+javascript
 /* =========================================
    PORTFOLIO JAVASCRIPT
    ========================================= */
@@ -127,4 +127,3 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 });
-```
