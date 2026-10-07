@@ -1,71 +1,92 @@
-/*
-========================================
+```javascript
+/* =========================================
+   PORTFOLIO JAVASCRIPT
+   ========================================= */
+
+
+/* =========================================
    INITIALIZE LUCIDE ICONS
-========================================
-*/
+   ========================================= */
 
-lucide.createIcons();
+document.addEventListener("DOMContentLoaded", function () {
+
+    if (typeof lucide !== "undefined") {
+        lucide.createIcons();
+    }
+
+});
 
 
-/*
-========================================
-   LIGHTBOX
-========================================
-*/
+/* =========================================
+   OPEN LIGHTBOX
+   ========================================= */
 
 function openLightbox(src) {
 
     const lightbox = document.getElementById("lightbox");
-    const img = document.getElementById("lightbox-img");
+    const image = document.getElementById("lightbox-img");
 
-    if (!lightbox || !img) return;
+    if (!lightbox || !image) {
+        return;
+    }
 
-    img.src = src;
+    image.src = src;
 
     lightbox.classList.remove("hidden");
 
-    setTimeout(() => {
+    document.body.style.overflow = "hidden";
+
+    /*
+     * Small delay allows the browser
+     * to apply the transition smoothly.
+     */
+
+    setTimeout(function () {
 
         lightbox.classList.add("opacity-100");
 
-        img.classList.remove("scale-95");
-        img.classList.add("scale-100");
+        image.classList.remove("scale-95");
+        image.classList.add("scale-100");
 
     }, 10);
 
-    document.body.style.overflow = "hidden";
 }
 
+
+/* =========================================
+   CLOSE LIGHTBOX
+   ========================================= */
 
 function closeLightbox() {
 
     const lightbox = document.getElementById("lightbox");
-    const img = document.getElementById("lightbox-img");
+    const image = document.getElementById("lightbox-img");
 
-    if (!lightbox || !img) return;
+    if (!lightbox || !image) {
+        return;
+    }
 
     lightbox.classList.remove("opacity-100");
 
-    img.classList.remove("scale-100");
-    img.classList.add("scale-95");
+    image.classList.remove("scale-100");
+    image.classList.add("scale-95");
 
-    setTimeout(() => {
+    setTimeout(function () {
 
         lightbox.classList.add("hidden");
 
-        img.src = "";
+        image.src = "";
 
-        document.body.style.overflow = "auto";
+        document.body.style.overflow = "";
 
     }, 500);
+
 }
 
 
-/*
-========================================
-   ESC KEY CLOSE
-========================================
-*/
+/* =========================================
+   ESC KEY TO CLOSE LIGHTBOX
+   ========================================= */
 
 document.addEventListener("keydown", function (event) {
 
@@ -87,91 +108,23 @@ document.addEventListener("keydown", function (event) {
 });
 
 
-/*
-========================================
-   GALLERY
-========================================
-*/
+/* =========================================
+   PREVENT IMAGE CLICK FROM CLOSING LIGHTBOX
+   ========================================= */
 
-let currentSlide = 0;
-const totalSlides = 1;
-let galleryTimer;
+document.addEventListener("DOMContentLoaded", function () {
 
+    const image = document.getElementById("lightbox-img");
 
-function goToSlide(index) {
+    if (image) {
 
-    currentSlide = index;
+        image.addEventListener("click", function (event) {
 
-    const track = document.getElementById("galleryTrack");
-
-    if (track) {
-
-        track.style.transform =
-            `translateX(-${currentSlide * 100}%)`;
-
-    }
-
-    document
-        .querySelectorAll(".gallery-dot")
-        .forEach((dot, i) => {
-
-            dot.classList.toggle(
-                "active",
-                i === currentSlide
-            );
+            event.stopPropagation();
 
         });
 
-    resetGalleryTimer();
-}
-
-
-function changeSlide(direction) {
-
-    currentSlide += direction;
-
-    if (currentSlide >= totalSlides) {
-
-        currentSlide = 0;
-
     }
 
-    if (currentSlide < 0) {
-
-        currentSlide = totalSlides - 1;
-
-    }
-
-    goToSlide(currentSlide);
-}
-
-
-function resetGalleryTimer() {
-
-    clearInterval(galleryTimer);
-
-    /*
-       Only start automatic sliding
-       when there is more than one image.
-    */
-
-    if (totalSlides > 1) {
-
-        galleryTimer = setInterval(() => {
-
-            changeSlide(1);
-
-        }, 5000);
-
-    }
-
-}
-
-
-/*
-========================================
-   START GALLERY
-========================================
-*/
-
-resetGalleryTimer();
+});
+```
